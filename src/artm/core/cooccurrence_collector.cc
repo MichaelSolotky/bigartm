@@ -357,6 +357,7 @@ void CooccurrenceCollector::ReadAndMergeCooccurrenceBatches() {
   // this data can be read back from output file.
 
   // std::cout << "Step 2: merging batches" << std::endl;
+  // Note: one may make search of a better value for better performance
   const unsigned min_num_of_batches_to_be_merged_in_parallel = 32;
   while (vector_of_batches_.size() > min_num_of_batches_to_be_merged_in_parallel) {
     FirstStageOfMerging();  // size is decreasing here
