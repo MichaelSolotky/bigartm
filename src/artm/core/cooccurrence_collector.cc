@@ -607,13 +607,6 @@ Vocab::Vocab(const std::string& path_to_vocab) {
         for (; modality_ind < strs.size() && strs[modality_ind].empty(); ++modality_ind) { }
         modality = strs[modality_ind];
       }
-
-      std::cout << strs.size() << ' ';
-      for (auto iter = strs.begin(); iter != strs.end(); ++iter) {
-        std::cout << *iter << ' ';
-      }
-      std::cout << '\n';
-
       std::string key = MakeKey(strs[0], modality);
       auto iter = token_map_.find(key);
       if (iter == token_map_.end()) {
