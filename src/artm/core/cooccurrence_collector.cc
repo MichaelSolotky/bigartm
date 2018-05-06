@@ -596,14 +596,24 @@ Vocab::Vocab(const std::string& path_to_vocab) {
   for (unsigned last_token_id = 0; getline(vocab_ifile, str); ++last_token_id) {
     boost::algorithm::trim(str);
     std::vector<std::string> strs;
-    boost::split(strs, str, boost::is_any_of(" \t\r"));
+    boost::split(strs, str, boost::is_any_of(" ,\t\r"));
     if (!strs[0].empty()) {
       std::string modality;
       if (strs.size() == 1) {
         modality = "@default_class";  // Here is how modality is indicated in vocab file (without '|')
       } else {
-        modality = strs[1];
+        // boost::split can produce empty strings
+        unsigned modality_ind = 1;
+        for (; modality_ind < strs.size() && strs[modality_ind].empty(); ++modality_ind) { }
+        modality = strs[modality_ind];
       }
+
+      std::cout << strs.size() << ' ';
+      for (auto iter = strs.begin(); iter != strs.end(); ++iter) {
+        std::cout << *iter << ' ';
+      }
+      std::cout << '\n';
+
       std::string key = MakeKey(strs[0], modality);
       auto iter = token_map_.find(key);
       if (iter == token_map_.end()) {
