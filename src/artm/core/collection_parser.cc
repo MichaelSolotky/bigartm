@@ -444,6 +444,7 @@ CollectionParserInfo CollectionParser::ParseVowpalWabbit() {
   utility::ProgressPrinter progress(stream_or_cin.size());
 
   auto start = std::chrono::high_resolution_clock::now();  // time measurer
+  long long used_mem = 0; // memory measurer
 
   auto config = config_;
 
@@ -740,7 +741,7 @@ CollectionParserInfo CollectionParser::ParseVowpalWabbit() {
   auto finish = std::chrono::high_resolution_clock::now();  // time measurer
 
   std::chrono::duration<double> elapsed = finish - start;
-  std::cout << elapsed.count() << '\n';
+  //std::cout << elapsed.count() << '\n';
 
   parser_info.set_dictionary_size(token_map.size());
   return parser_info;

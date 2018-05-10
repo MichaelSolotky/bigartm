@@ -311,6 +311,7 @@ void CooccurrenceCollector::UploadOnDisk(const CooccurrenceStatisticsHolder& coo
     batch->FormNewCell(iter);
     batch->WriteCell();
   }
+  ;
   CloseBatchOutputFile(batch);
   vector_of_batches_.push_back(std::move(batch));
 }
