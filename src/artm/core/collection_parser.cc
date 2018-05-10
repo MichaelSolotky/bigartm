@@ -14,6 +14,8 @@
 #include <iostream>  // NOLINT
 #include <future>  // NOLINT
 #include <atomic>
+#include <ctime>
+#include <chrono>
 
 #include "boost/algorithm/string.hpp"
 #include "boost/algorithm/string/predicate.hpp"
@@ -441,6 +443,8 @@ CollectionParserInfo CollectionParser::ParseVowpalWabbit() {
   std::istream& docword = stream_or_cin.get_stream();
   utility::ProgressPrinter progress(stream_or_cin.size());
 
+  auto start = std::chrono::high_resolution_clock::now();  // time measurer
+
   auto config = config_;
 
   std::mutex read_access;
@@ -596,7 +600,7 @@ CollectionParserInfo CollectionParser::ParseVowpalWabbit() {
 
             int first_token_id = -1;
             if (config.has_vocab_file_path()) {
-              first_token_id = cooc_collector.vocab_.FindTokenId(elem, first_token_class_id);
+              first_token_id = cooc_collector.vocab_.FindTokenId(temp, first_token_class_id);
               if (first_token_id == TOKEN_NOT_FOUND) {
                 continue;
               }
@@ -632,7 +636,11 @@ CollectionParserInfo CollectionParser::ParseVowpalWabbit() {
                 continue;
               }
               int second_token_id = -1;
-              const std::string neigh = strs[elem_index + neigh_index];
+              // Temporary solution: tokens used in co-occurence shouldn't include colon
+              std::string neigh = strs[elem_index + neigh_index];
+              size_t colon_index = neigh.find(':');
+              neigh = colon_index != std::string::npos ? neigh.substr(0, colon_index) : neigh;
+
               if (config.has_vocab_file_path()) {
                 second_token_id = cooc_collector.vocab_.FindTokenId(neigh, second_token_class_id);
                 if (second_token_id == TOKEN_NOT_FOUND) {
@@ -728,6 +736,11 @@ CollectionParserInfo CollectionParser::ParseVowpalWabbit() {
       cooc_collector.ReadAndMergeCooccurrenceBatches();
     }
   }
+
+  auto finish = std::chrono::high_resolution_clock::now();  // time measurer
+
+  std::chrono::duration<double> elapsed = finish - start;
+  std::cout << elapsed.count() << '\n';
 
   parser_info.set_dictionary_size(token_map.size());
   return parser_info;
