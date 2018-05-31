@@ -443,9 +443,6 @@ CollectionParserInfo CollectionParser::ParseVowpalWabbit() {
   std::istream& docword = stream_or_cin.get_stream();
   utility::ProgressPrinter progress(stream_or_cin.size());
 
-  auto start = std::chrono::high_resolution_clock::now();  // time measurer
-  long long used_mem = 0; // memory measurer
-
   auto config = config_;
 
   std::mutex read_access;
@@ -737,11 +734,6 @@ CollectionParserInfo CollectionParser::ParseVowpalWabbit() {
       cooc_collector.ReadAndMergeCooccurrenceBatches();
     }
   }
-
-  auto finish = std::chrono::high_resolution_clock::now();  // time measurer
-
-  std::chrono::duration<double> elapsed = finish - start;
-  //std::cout << elapsed.count() << '\n';
 
   parser_info.set_dictionary_size(token_map.size());
   return parser_info;
