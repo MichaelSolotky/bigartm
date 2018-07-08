@@ -14,7 +14,7 @@ where value is some symetric pairwise information about tokens in collection dic
 
 where `n(u)` and `n(v)` are frequencies of `u` and `v` in corpora, `n(u,v)` is joint frequency of `u` and `v` in corpora in window with some fixed width, `n` is length of corpora in words.
 
-* **Tokens Co-occurrence Dictionary**
+* **Tokens Co-occurrence Statistics Gathering**
 
 BigARTM provides automatic gathering of co-occurrence statistics and coherence computation. Co-occurrence gathering tool is available from :doc:`../bigartm_cli`. Here are types of co-occurrences available now:
 
