@@ -7,24 +7,26 @@ The one of main requirements of topic models is interpretability (i.e., do the t
 
 :math:`\mathcal{C}_t = \cfrac{2}{k(k - 1)} \sum\limits_{i = 1}^{k - 1} \sum\limits_{j = i}^{k} \mathrm{value}(w_i, w_j)`,
 
-where value is some symetric pairwise information about tokens in collection dictionary, which is provided by user according to his goals.
-
-* **Tokens Co-occurrence Dictionary**
-
-BigARTM provides ability of automatic coherence computation. The only thing you should prepare is file with co-occurrences of tokens (to know how to gather a co-occurrence dictionary using BigARTM CLI, please read :doc:`../bigartm_cli`). Lines of that file should have the next format: ::
-
-	id1 id2 value
-
-where ``id1`` and ``id2`` are indexes of tokens in vocabulary file in UCI format (with 0-based indexing!). Details about UCI format can be found here: :doc:`../datasets`. ``value`` is some pairwise information about tokens with indexes ``id1`` and ``id2``. For instance, ``value`` can be computed by any corpora of texts by formulas:
+where value is some symetric pairwise information about tokens in collection dictionary, which is provided by user according to his goals. For instance, value can be computed by any corpora of texts by formulas:
 
 * positive PMI: :math:`value(u,v)=\left[\log\cfrac{n(u,v)n}{n(u)n(v)}\right]_{+}`, 
 * smoothed logarithm of conditional probability: :math:`value(u,v)=\log\cfrac{n(u,v)+1}{n(v)}`,
 
 where `n(u)` and `n(v)` are frequencies of `u` and `v` in corpora, `n(u,v)` is joint frequency of `u` and `v` in corpora in window with some fixed width, `n` is length of corpora in words.
 
-* **Usage**
+* **Tokens Co-occurrence Dictionary**
 
-Let's assume you have file `cooc.txt` with co-occurrences of tokens. Also you should have vocabulary file in UCI format `vocab.txt` corresponding to `cooc.txt` file. 
+BigARTM provides ability of automatic coherence computation and co-occurrence statistics gathering. Co-occurrence gathering tool is available from :doc:`../bigartm_cli`. Here are types of co-occurrences available now:
+
+* Cooc TF: :math:`n_{uv} = \sum\limits_{d = 1}^{|D|} \sum\limits_{i = 1}^{N_d} \sum\limits_{j = 1}^{N_d} [0 < |i - j| \leq k] [w_{di} = u] [w_{dj} = v]`,
+
+* Cooc DF: :math:`n_{uv} = \sum\limits_{d = 1}^{|D|} [\, \exists \, i, j : w_{di} = u, w_{dj} = v, 0 < |i - j| \leq k]`, 
+
+where k is parameter of window width which can be specified by user, D is collection, :math:`N_{d}` is length of document d. Briefly cooc TF measures how many times the given pair occurred in the collection in a window and cooc DF measures in how many documents the given pair occurred at least once in a window of a given width.
+
+* **Coherence Computation**
+
+Let's assume you have file `cooc.txt` with co-occurrences of tokens. Also you should have vocabulary file in UCI format `vocab.txt` corresponding to `cooc.txt` file. Details about UCI format can be found here: :doc:`../datasets`.
 
 To upload co-occurrence data into BigARTM you should use ``artm.Dictionary`` object and method ``gather``: ::
 
