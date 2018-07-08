@@ -16,13 +16,13 @@ where `n(u)` and `n(v)` are frequencies of `u` and `v` in corpora, `n(u,v)` is j
 
 * **Tokens Co-occurrence Dictionary**
 
-BigARTM provides ability of automatic coherence computation and co-occurrence statistics gathering. Co-occurrence gathering tool is available from :doc:`../bigartm_cli`. Here are types of co-occurrences available now:
+BigARTM provides automatic gathering of co-occurrence statistics and coherence computation. Co-occurrence gathering tool is available from :doc:`../bigartm_cli`. Here are types of co-occurrences available now:
 
 * Cooc TF: :math:`n_{uv} = \sum\limits_{d = 1}^{|D|} \sum\limits_{i = 1}^{N_d} \sum\limits_{j = 1}^{N_d} [0 < |i - j| \leq k] [w_{di} = u] [w_{dj} = v]`,
 
 * Cooc DF: :math:`n_{uv} = \sum\limits_{d = 1}^{|D|} [\, \exists \, i, j : w_{di} = u, w_{dj} = v, 0 < |i - j| \leq k]`, 
 
-where k is parameter of window width which can be specified by user, D is collection, :math:`N_{d}` is length of document d. Briefly cooc TF measures how many times the given pair occurred in the collection in a window and cooc DF measures in how many documents the given pair occurred at least once in a window of a given width.
+where k is parameter of window width which can be specified by user, D is collection, :math:`N_{d}` is length of document d. In brief cooc TF measures how many times the given pair occurred in the collection in a window and cooc DF measures in how many documents the given pair occurred at least once in a window of a given width.
 
 * **Coherence Computation**
 
