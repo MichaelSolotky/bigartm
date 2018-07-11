@@ -15,7 +15,6 @@
 #include <future>  // NOLINT
 #include <atomic>
 #include <ctime>
-#include <chrono>
 
 #include "boost/algorithm/string.hpp"
 #include "boost/algorithm/string/predicate.hpp"
