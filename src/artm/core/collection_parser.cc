@@ -776,6 +776,9 @@ CollectionParserInfo CollectionParser::ParseVowpalWabbit() {
   } else {
     num_threads = collection_parser_config.num_threads();
   }
+  if (num_threads <= 0) {
+    abort();
+  }
 
   Helpers::CreateFolderIfNotExists(collection_parser_config.target_folder());
 
