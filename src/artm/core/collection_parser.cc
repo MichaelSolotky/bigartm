@@ -770,10 +770,10 @@ CollectionParserInfo CollectionParser::ParseVowpalWabbit() {
       // number of threads shouldn't be higher than maximal allowable number of open files in a process
       // because else there could be a situation when all the threads are trying to dump it's own batch
       // to the external storage
+      num_threads = std::min(n, cooc_collector.config_.max_num_of_open_files_in_a_process());
       if (num_threads == 0) {
         abort();
       }
-      num_threads = std::min(n, cooc_collector.config_.max_num_of_open_files_in_a_process());
       LOG(INFO) << "CollectionParserConfig.num_threads is automatically set to " << num_threads;
     }
   } else {
