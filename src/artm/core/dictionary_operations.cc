@@ -412,22 +412,20 @@ std::shared_ptr<Dictionary> DictionaryOperations::Gather(const GatherDictionaryA
         std::getline(user_cooc_data, str);
         boost::algorithm::trim(str);
 
-        ClassId first_token_class_id = DefaultClass;  // Here's how modality is indicated in output file
         std::vector<std::string> strs;
         boost::split(strs, str, boost::is_any_of(" :\t\r"));
-        unsigned pos_of_first_token = 0;
+        unsigned pos_of_first_token = 0;  // Skip document's name
         // Find modality and position of the first token
-        for (; pos_of_first_token < strs.size() && (strs[pos_of_first_token].empty() ||
-                                                    strs[pos_of_first_token][0] == '|'); ++pos_of_first_token) {
-          if (!strs[pos_of_first_token].empty()) {
-            first_token_class_id = strs[pos_of_first_token];
-            first_token_class_id.erase(0, 1);
-          }
-        }
+        for (; pos_of_first_token < strs.size() && strs[pos_of_first_token].empty(); ++pos_of_first_token) { }
         if (pos_of_first_token >= strs.size()) {
           continue;
         }
-        std::string first_token_str = strs[pos_of_first_token];
+        const std::string& first_token_and_modality_str = strs[pos_of_first_token];
+        std::vector<std::string> first_token_parts;
+        boost::split(first_token_parts, first_token_and_modality_str, boost::is_any_of("|"));
+        const std::string first_token_str = first_token_parts[0];
+        ClassId first_token_class_id = first_token_parts[1];
+
         Token first_token(first_token_class_id, first_token_str);
         auto first_token_ptr = token_to_token_id.find(first_token);
         if (first_token_ptr == token_to_token_id.end()) {

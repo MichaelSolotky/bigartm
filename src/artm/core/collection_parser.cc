@@ -586,9 +586,9 @@ CollectionParserInfo CollectionParser::ParseVowpalWabbit() {
         std::vector<float> weights;
 
         // Loop through tokens
-        for (unsigned elem_index = 1; elem_index < strs.size(); ++elem_index) {
+        for (unsigned elem_index = 1; elem_index < strs.size(); ++elem_index) {  // starts from 1, cos it ignores documents' name
           std::string elem = strs[elem_index];
-          if (elem.size() == 0) {
+          if (elem.empty()) {
             continue;
           }
 
@@ -661,7 +661,7 @@ CollectionParserInfo CollectionParser::ParseVowpalWabbit() {
             int first_token_id = -1;
             if (collection_parser_config.has_vocab_file_path()) {
               std::string first_token = DropWeightSuffix(elem);
-              first_token_id = cooc_collector.FindTokenIdInVocab(first_token, first_token_class_id);
+              first_token_id = cooc_collector.vocab_.FindTokenId(first_token, first_token_class_id);
               if (first_token_id == TOKEN_NOT_FOUND) {
                 continue;
               }
@@ -700,7 +700,7 @@ CollectionParserInfo CollectionParser::ParseVowpalWabbit() {
               const std::string neighbour = strs[elem_index + neighbour_index];
               if (collection_parser_config.has_vocab_file_path()) {
                 std::string second_token = DropWeightSuffix(neighbour);
-                second_token_id = cooc_collector.FindTokenIdInVocab(second_token, second_token_class_id);
+                second_token_id = cooc_collector.vocab_.FindTokenId(second_token, second_token_class_id);
                 if (second_token_id == TOKEN_NOT_FOUND) {
                   continue;
                 }

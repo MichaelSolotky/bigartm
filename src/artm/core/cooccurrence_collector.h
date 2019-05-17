@@ -98,8 +98,6 @@ class CooccurrenceCollector {
 
  private:
   std::string MakeKeyForVocab(const std::string& token_str, const std::string& modality) const;
-  int FindTokenIdInVocab(const std::string& token_str, const std::string& modality);
-  Vocab::TokenModality FindTokenStrInVocab(const int token_id);
   unsigned VocabSize();
   void CreateAndSetTargetFolder();
   std::string CreateFileInBatchDir() const;
@@ -109,8 +107,7 @@ class CooccurrenceCollector {
                             std::vector<std::shared_ptr<CooccurrenceBatch>>* intermediate_batches);
   void KWayMerge(BufferOfCooccurrences* res, const int mode,
                  std::vector<std::shared_ptr<CooccurrenceBatch>>* vector_of_batches_ptr,
-                 std::shared_ptr<CooccurrenceBatch> out_batch,
-                 std::shared_ptr<std::mutex> open_close_file_mutex_ptr);
+                 std::shared_ptr<CooccurrenceBatch> out_batch);
   CooccurrenceBatch* CreateNewCooccurrenceBatch();
   void OpenBatchInputFile(std::shared_ptr<CooccurrenceBatch> batch);
   void OpenBatchOutputFile(std::shared_ptr<CooccurrenceBatch> batch);
@@ -122,10 +119,8 @@ class CooccurrenceCollector {
   std::vector<unsigned> num_of_documents_token_occurred_in_;  // the index here is token_id
   std::vector<std::shared_ptr<CooccurrenceBatch>> vector_of_batches_;
   int open_files_counter_;
-  std::mutex open_close_file_mutex_;
   std::mutex vocab_access_mutex_;
   std::mutex vector_of_batches_access_mutex_;
-  std::mutex target_dir_access_mutex_;
   CooccurrenceCollectorConfig config_;
 };
 
@@ -203,7 +198,7 @@ class BufferOfCooccurrences {
   void CheckOutputFile(const std::ofstream& file, const std::string& filename);
   void MergeWithExistingCell(const CooccurrenceBatch& batch);
   void CalculateTFStatistics();
-  void WriteCoocFromCell(const std::string mode, const unsigned cooc_min);  // Output file formats are defined here
+  void WriteCoocFromCellInCoocFile(const std::string mode, const unsigned cooc_min);  // Output file formats are defined here
   int64_t GetCoocFromCell(const std::string& mode, const unsigned record_pos) const;
   void CalculateAndWritePpmi(const std::string mode, const long double n);
   double GetTokenFreq(const std::string& mode, const int token_id) const;
